@@ -57,6 +57,19 @@ interface PetImage {
     _id: string;
 }
 
+export interface PetForm {
+    petName: string;
+    petDescription: string;
+    price: number;
+    isFree: boolean;
+    petType: string;
+    petBread: string;
+    diseases: string;
+    images: FileList;
+    petImages: PetImage[];
+    [key: string]: any;
+}
+
 export interface Product {
     _id: string;
     productName: string;
@@ -100,7 +113,9 @@ export interface Blog {
     comments: Comment[];
     coverImage: { publicId: string; url: string };
     likes: string[];
-    userData: BlogUser;
+    created_at:string;
+    userDetails: BlogUser;
+    userData?: BlogUser;
     data?: any;
 }
 
@@ -131,7 +146,24 @@ export interface CartItem {
     quantity: number;
     purchasedPrice: number;
     user?: {
+      name: string;
+    user?: {
         name: string;
     };
     isPurchased?: boolean;
+  }
+    isPurchased?: boolean;
+}
+
+
+export interface AdoptPetFormData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    pet_id: string;
+    street: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    phoneNumber: string;
 }
