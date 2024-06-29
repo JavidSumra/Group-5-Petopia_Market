@@ -92,7 +92,7 @@ const registerUser = AsyncHandler(async (req: Request, res: Response) => {
   };
 
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, userRole } = req.body;
 
     if ([firstName, email, password].some((attr) => attr?.trim() === '')) {
       return res.status(402).json(new APIError('Required Fields are Missing', 402));
@@ -126,6 +126,7 @@ const registerUser = AsyncHandler(async (req: Request, res: Response) => {
       email,
       password,
       avatar: avatar,
+      userRole,
     });
 
     const isUserCreated = await UserModel.findById({ _id: createUser._id }).select(
@@ -324,11 +325,17 @@ const updateProfileDetails = AsyncHandler(async (req: IGetUserAuthInfoRequest, r
   }
 });
 
-const getAllUsers = AsyncHandler(async (req: Request, res: Response) => {
+const getAllUsers = AsyncHandler(async (req: IGetUserAuthInfoRequest, res: Response) => {
   try {
-    let usersList = await UserModel.find({});
+    let isAdmin = await UserModel.findById(req?.user?._id);
 
-    res.status(200).json(new APIResponse('All Available User List', 200, usersList));
+    if (isAdmin?.userRole === 'Admin') {
+      let usersList = await UserModel.find({});
+
+      res.status(200).json(new APIResponse('All Available User List', 200, usersList));
+    } else {
+      res.status(200).json(new APIResponse('only Admin can Access the User List', 200, []));
+    }
   } catch (error: any) {
     console.log(error);
     res.status(502).json(new APIError(error?.message || 'Internal Server Error', 502));

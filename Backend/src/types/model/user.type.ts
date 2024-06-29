@@ -13,6 +13,7 @@ export interface IUser extends mongoose.Document {
     city: string;
     phoneNumber: string;
   };
+  userRole: 'Admin' | 'Customer';
   refreshToken?: string;
   avatar?: CloudinaryImage;
   ComparePassword(password: string): Promise<boolean>;
